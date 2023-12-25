@@ -88,6 +88,17 @@ jobs:
                 "snapshots": {
                   "enabled": "true"
                 }
+              },
+              {
+                "id": "shibboleth",
+                "name": "shibboleth",
+                "url": "https://build.shibboleth.net/nexus/content/repositories/releases",
+                "releases": {
+                  "enabled": "true"
+                },
+                "snapshots": {
+                  "enabled": "true"
+                }
               }
             ]
       - name: Build
