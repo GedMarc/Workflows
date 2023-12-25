@@ -90,9 +90,6 @@ jobs:
                 }
               }
             ]
-      - name: Print
-        if: false
-        run: cat /home/runner/.m2/settings.xml
       - name: Build
         run: mvn -B package --file ${{inputs.baseDir}}pom.xml
       - name: Publish
