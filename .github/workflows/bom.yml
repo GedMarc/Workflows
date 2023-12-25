@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         java-version: [ 21 ]
-    name: BOM Builder - ${{ matrix.Java }}
+    name: BOM ${{ inputs.name }} Builder - ${{ matrix.Java }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Java
