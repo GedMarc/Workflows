@@ -12,6 +12,19 @@ on:
         required: true
         type: string
         default: ''
+    secrets:
+      USERNAME:
+        required: true
+        description: 'Username for Github'
+      USER_TOKEN:
+        required: true
+        description: 'The supplied token for Github'
+      SONA_USERNAME:
+        required: true
+        description: 'Username for Maven Central'
+      SONA_PASSWORD:
+        required: true
+        description: 'Passphrase for Maven Central'
 permissions:
   contents: read
   packages: write
