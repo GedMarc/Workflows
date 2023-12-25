@@ -1,0 +1,80 @@
+name: BOM Builder
+on:
+  workflow_call:
+    inputs:
+      baseDir:
+        description: 'Base Directory with suffix /'
+        required: true
+        type: string
+        default: ''
+      name:
+        description: 'BOM Name'
+        required: true
+        type: string
+        default: ''
+permissions:
+  contents: read
+  packages: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        java-version: [ 21 ]
+    name: BOM Builder - ${{ matrix.Java }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'oracle'
+          server-id: github
+          settings-path: ${{ github.workspace }}
+          cache: 'maven'
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Update Settings.xml
+        uses: whelk-io/maven-settings-xml-action@v20
+        with:
+          servers: >
+            [
+              {
+                "id": "packages",
+                "username": "${secrets.USERNAME}",
+                "password": "${secrets.USER_TOKEN}"
+              },
+              {
+                "id": "sona-snapshot",
+                "username": "${secrets.SONA_USERNAME}",
+                "password": "${secrets.SONA_PASSWORD}"
+              },
+              {
+                "id": "sona-release",
+                "username": "${secrets.SONA_USERNAME}",
+                "password": "${secrets.SONA_PASSWORD}"
+              }
+            ]
+          repositories: >
+            [
+              {
+                "id": "packages",
+                "name": "packages",
+                "url": "https://maven.pkg.github.com/GuicedEE/Packages",
+                "releases": {
+                  "enabled": "true"
+                },
+                "snapshots": {
+                  "enabled": "true"
+                }
+              }
+            ]
+      - name: Build
+        run: mvn -B package --file ${{inputs.baseDir}}pom.xml
+      - name: Publish
+        run: mvn deploy --file ${{inputs.baseDir}}pom.xml -s $GITHUB_WORKSPACE/settings.xml
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
