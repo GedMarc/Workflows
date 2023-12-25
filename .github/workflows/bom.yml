@@ -44,23 +44,23 @@ jobs:
             [
               {
                 "id": "github",
-                "username": "${secrets.USERNAME}",
-                "password": "${secrets.USER_TOKEN}"
+                "username": "${{secrets.USERNAME}}",
+                "password": "${{secrets.USER_TOKEN}}"
               },
               {
                 "id": "packages",
-                "username": "${secrets.USERNAME}",
-                "password": "${secrets.USER_TOKEN}"
+                "username": "${{secrets.USERNAME}}",
+                "password": "${{secrets.USER_TOKEN}}"
               },
               {
                 "id": "sona-snapshot",
-                "username": "${secrets.SONA_USERNAME}",
-                "password": "${secrets.SONA_PASSWORD}"
+                "username": "${{secrets.SONA_USERNAME}}",
+                "password": "${{secrets.SONA_PASSWORD}}"
               },
               {
                 "id": "sona-release",
-                "username": "${secrets.SONA_USERNAME}",
-                "password": "${secrets.SONA_PASSWORD}"
+                "username": "${{secrets.SONA_USERNAME}}",
+                "password": "${{secrets.SONA_PASSWORD}}"
               }
             ]
           repositories: >
@@ -78,6 +78,7 @@ jobs:
               }
             ]
       - name: Print
+        if: false
         run: cat /home/runner/.m2/settings.xml
       - name: Build
         run: mvn -B package --file ${{inputs.baseDir}}pom.xml
