@@ -80,6 +80,6 @@ jobs:
       - name: Build
         run: mvn -B package --file ${{inputs.baseDir}}pom.xml
       - name: Publish
-        run: mvn deploy --file ${{inputs.baseDir}}pom.xml -s $GITHUB_WORKSPACE/settings.xml
+        run: mvn deploy --file ${{inputs.baseDir}}pom.xml
         #env:
         #  GITHUB_TOKEN: ${{ github.token }}
