@@ -1,0 +1,112 @@
+name: BOM Builder
+on:
+  workflow_call:
+    inputs:
+      baseDir:
+        description: 'Base Directory with suffix /'
+        required: true
+        type: string
+        default: ''
+      name:
+        description: 'BOM Name'
+        required: true
+        type: string
+        default: ''
+    secrets:
+      USERNAME:
+        required: true
+        description: 'Username for Github'
+      USER_TOKEN:
+        required: true
+        description: 'The supplied token for Github'
+      SONA_USERNAME:
+        required: true
+        description: 'Username for Maven Central'
+      SONA_PASSWORD:
+        required: true
+        description: 'Passphrase for Maven Central'
+permissions:
+  contents: read
+  packages: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        java-version: [ 21 ]
+    name: ${{ inputs.name }} Builder
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          show-progress: 'true'
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'oracle'
+          #server-id: github_token
+          #settings-path: ${{ github.workspace }}
+         # cache: 'maven'
+         # gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+         # gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Update Settings.xml
+        uses: whelk-io/maven-settings-xml-action@v21
+        with:
+          servers: >
+            [
+              {
+                "id": "github",
+                "username": "${{secrets.USERNAME}}",
+                "password": "${{secrets.USER_TOKEN}}"
+              },
+              {
+                "id": "packages",
+                "username": "${{secrets.USERNAME}}",
+                "password": "${{secrets.USER_TOKEN}}"
+              },
+              {
+                "id": "sona-snapshot",
+                "username": "${{secrets.SONA_USERNAME}}",
+                "password": "${{secrets.SONA_PASSWORD}}"
+              },
+              {
+                "id": "sona-release",
+                "username": "${{secrets.SONA_USERNAME}}",
+                "password": "${{secrets.SONA_PASSWORD}}"
+              }
+            ]
+          repositories: >
+            [
+              {
+                "id": "packages",
+                "name": "packages",
+                "url": "https://maven.pkg.github.com/GuicedEE/Packages",
+                "releases": {
+                  "enabled": "true"
+                },
+                "snapshots": {
+                  "enabled": "true"
+                }
+              },
+              {
+                "id": "shibboleth",
+                "name": "shibboleth",
+                "url": "https://build.shibboleth.net/nexus/content/repositories/releases",
+                "releases": {
+                  "enabled": "true"
+                },
+                "snapshots": {
+                  "enabled": "true"
+                }
+              }
+            ]
+      - name: Build
+        run: mvn -B package --file ${{inputs.baseDir}}pom.xml -U
+      - name: Publish
+        run: mvn deploy --file ${{inputs.baseDir}}pom.xml
+        #env:
+        #  GITHUB_TOKEN: ${{ github.token }}
