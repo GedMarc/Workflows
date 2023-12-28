@@ -105,7 +105,7 @@ jobs:
               }
             ]
       - name: Build
-        run: mvn -B package --file ${{inputs.baseDir}}pom.xml -U
+        run: mvn -B clean compile test package --file ${{inputs.baseDir}}pom.xml -U
 
       - name: Publish
         run: mvn deploy --file ${{inputs.baseDir}}pom.xml
