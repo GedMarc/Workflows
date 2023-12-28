@@ -47,7 +47,7 @@ jobs:
           distribution: 'oracle'
           #server-id: github_token
           #settings-path: ${{ github.workspace }}
-          cache: 'maven'
+         # cache: 'maven'
          # gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
          # gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Update Settings.xml
