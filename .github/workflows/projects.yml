@@ -104,6 +104,13 @@ jobs:
                 }
               }
             ]
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-
       - name: Build
         run: mvn -B clean compile test package --file ${{inputs.baseDir}}pom.xml -U
 
