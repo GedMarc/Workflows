@@ -115,6 +115,6 @@ jobs:
         run: mvn -B clean compile test package --file ${{inputs.baseDir}}pom.xml -U
 
       - name: Publish
-        run: mvn deploy --file ${{inputs.baseDir}}pom.xml
+        run: mvn deploy --file ${{inputs.baseDir}}pom.xml -Dignore.moditect=true
         #env:
         #  GITHUB_TOKEN: ${{ github.token }}
