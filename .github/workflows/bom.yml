@@ -12,6 +12,11 @@ on:
         required: true
         type: string
         default: ''
+      publishToCentral:
+        description: 'Whether or not to publish to the central repository'
+        required: false
+        type: boolean
+        default: false
     secrets:
       USERNAME:
         required: true
