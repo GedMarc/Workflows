@@ -120,5 +120,6 @@ jobs:
         run: mvn -B package --file ${{inputs.baseDir}}pom.xml -U
       - name: Publish
         run: mvn deploy --file ${{inputs.baseDir}}pom.xml  -Dignore.moditect=true
-        #env:
-        #  GITHUB_TOKEN: ${{ github.token }}
+      - name: Publish To Central
+        if: inputs.publishToCentral
+        run: mvn org.apache.maven.plugins:maven-gpg-plugin:sign deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dignore.moditect=true
