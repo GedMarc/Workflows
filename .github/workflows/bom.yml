@@ -124,6 +124,11 @@ jobs:
             maven-
       - name: Listings
         run: ls -l
+      - name: Run Listings
+        run: |
+          cd ${{inputs.baseDir}}
+          ls -l
+          cd ..
       - name: Build
         run:
           mvn -B package --file ${{inputs.baseDir}}pom.xml -U
