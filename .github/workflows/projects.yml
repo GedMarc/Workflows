@@ -124,8 +124,6 @@ jobs:
           key: maven-${{ hashFiles('**pom.xml') }}
           restore-keys: |
             maven-
-      - name: Listings
-        run: ls -l
       - name: Build
         run:
           mvn -B clean compile test package --file ${{inputs.baseDir}}pom.xml -U
