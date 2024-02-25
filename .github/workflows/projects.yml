@@ -15,9 +15,8 @@ on:
       publishToCentral:
         description: 'Whether or not to publish to the central repository'
         required: false
-        type: boolean
-        default: false
-    push:
+        type: string
+        default: 'false'
     secrets:
       USERNAME:
         required: true
@@ -123,4 +122,4 @@ jobs:
             ]
       - name: Build
         run:
-          mvn -B deploy --file ${{inputs.baseDir}}pom.xml -U ${{inputs.publishToCentral == true && '-Psonatype-distribution,release -Dgpg.passphrase='}}${{inputs.publishToCentral == true && secrets.GPG_PASSPHRASE}}
+          mvn -B deploy --file ${{inputs.baseDir}}pom.xml -U ${{inputs.publishToCentral == 'true' && '-Psonatype-distribution,release -Dgpg.passphrase='}}${{inputs.publishToCentral == 'true' && secrets.GPG_PASSPHRASE}}
