@@ -122,4 +122,4 @@ jobs:
             ]
       - name: Build
         run:
-          mvn -B clean compile test package deploy --file ${{inputs.baseDir}}pom.xml -U ${{inputs.publishToCentral ? '-Psonatype-distribution,release -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}}'}}
+          mvn -B clean compile test package deploy --file ${{inputs.baseDir}}pom.xml -U ${{inputs.publishToCentral == true '-Psonatype-distribution,release -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}}'}}
