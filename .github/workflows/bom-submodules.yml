@@ -30,6 +30,12 @@ on:
       SONA_PASSWORD:
         required: true
         description: 'Passphrase for Maven Central'
+      GPG_PASSPHRASE:
+        required: false
+        description: 'Passphrase for GPG'
+      GPG_PRIVATE_KEY:
+        required: false
+        description: 'A GPG private key '
 permissions:
   contents: read
   packages: write
