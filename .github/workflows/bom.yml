@@ -123,7 +123,9 @@ jobs:
           restore-keys: |
             maven-
       - name: Build
-        run: mvn -B package --file ${{inputs.baseDir}}pom.xml -U
+        run:
+          ls - l
+          mvn -B package --file ${{inputs.baseDir}}pom.xml -U
       - name: Publish
         run: mvn deploy --file ${{inputs.baseDir}}pom.xml  -Dignore.moditect=true
       - name: Publish To Central
