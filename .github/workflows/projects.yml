@@ -135,4 +135,4 @@ jobs:
       - name: Publish To Central
         if: inputs.publishToCentral
         run:
-          mvn install org.apache.maven.plugins:maven-gpg-plugin:sign deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dignore.moditect=true   -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}}
+          mvn clean compile package install org.apache.maven.plugins:maven-gpg-plugin:sign deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dignore.moditect=true   -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}} -DskipTests=true
