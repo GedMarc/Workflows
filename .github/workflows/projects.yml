@@ -36,13 +36,13 @@ on:
       GPG_PRIVATE_KEY:
         required: false
         description: 'A GPG private key '
-
 permissions:
   contents: read
   packages: write
 env:
   GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
   GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+  POM_FILE: ${{inputs.baseDir}}pom.xml
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -66,7 +66,7 @@ jobs:
           distribution: 'oracle'
           #server-id: github_token
           #settings-path: ${{ github.workspace }}
-        #  cache: 'maven'
+          cache: 'maven'
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Update Settings.xml
@@ -120,13 +120,6 @@ jobs:
                 }
               }
             ]
-      - name: Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: maven-${{ hashFiles(inputs.baseDir'pom.xml') }}
-          restore-keys: |
-            maven-
       - name: Build
         run:
           mvn -B clean compile test package --file ${{inputs.baseDir}}pom.xml -U
