@@ -56,8 +56,8 @@ jobs:
           #server-id: github_token
           #settings-path: ${{ github.workspace }}
         #  cache: 'maven'
-        #  gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-        #  gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Update Settings.xml
         uses: whelk-io/maven-settings-xml-action@v21
         with:
