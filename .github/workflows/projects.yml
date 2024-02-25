@@ -68,7 +68,7 @@ jobs:
           #settings-path: ${{ github.workspace }}
           cache: 'maven'
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          gpg-passphrase: GPG_PASSPHRASE
       - name: Update Settings.xml
         uses: whelk-io/maven-settings-xml-action@v21
         with:
@@ -128,4 +128,4 @@ jobs:
       - name: Publish To Central
         if: inputs.publishToCentral
         run:
-          mvn deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dignore.moditect=true   -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}} -DskipTests=true
+          mvn deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}} -DskipTests=true
