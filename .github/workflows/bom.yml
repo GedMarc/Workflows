@@ -15,8 +15,8 @@ on:
       publishToCentral:
         description: 'Whether or not to publish to the central repository'
         required: false
-        type: boolean
-        default: false
+        type: string
+        default: 'false'
     secrets:
       USERNAME:
         required: true
@@ -61,7 +61,7 @@ jobs:
           distribution: 'oracle'
           #server-id: github_token
           #settings-path: ${{ github.workspace }}
-         # cache: 'maven'
+          cache: 'maven'
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: GPG_PASSPHRASE
       - name: Update Settings.xml
@@ -115,20 +115,6 @@ jobs:
                 }
               }
             ]
-      - name: Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: maven-${{ hashFiles('**pom.xml') }}
-          restore-keys: |
-            maven-
       - name: Build
         run:
-          mvn -B package --file ${{inputs.baseDir}}pom.xml -U
-      - name: Publish
-        if: inputs.publishToCentral == 'false' || inputs.publishToCentral == false
-        run: mvn deploy --file ${{inputs.baseDir}}pom.xml -Dignore.moditect=true
-      - name: Publish To Central
-        if: inputs.publishToCentral || inputs.publishToCentral == 'true'
-        run:
-          mvn deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}} -DskipTests=true -Dignore.moditect=true
+          mvn -B deploy --file ${{inputs.baseDir}}pom.xml -U ${{inputs.publishToCentral == 'true' && '-Psonatype-distribution,release -Dgpg.passphrase=' || ' '}}${{inputs.publishToCentral == 'true' && secrets.GPG_PASSPHRASE || ' '}}
