@@ -122,14 +122,14 @@ jobs:
           key: maven-${{ hashFiles('**pom.xml') }}
           restore-keys: |
             maven-
+      - name: Listings
+        run: ls -l
       - name: Build
         run:
-          ls - l
           mvn -B package --file ${{inputs.baseDir}}pom.xml -U
       - name: Publish
         run: mvn deploy --file ${{inputs.baseDir}}pom.xml  -Dignore.moditect=true
       - name: Publish To Central
         if: inputs.publishToCentral
         run:
-          ls - l
           mvn org.apache.maven.plugins:maven-gpg-plugin:sign deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dignore.moditect=true -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}}
