@@ -129,4 +129,4 @@ jobs:
       - name: Publish To Central
         if: inputs.publishToCentral || inputs.publishToCentral == 'true'
         run:
-          mvn deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}} -DskipTests=true
+          mvn clean deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}} -DskipTests=true
