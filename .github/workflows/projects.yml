@@ -124,8 +124,9 @@ jobs:
         run:
           mvn -B clean compile test package --file ${{inputs.baseDir}}pom.xml -U
       - name: Publish
+        if: inputs.publishToCentral == 'false' || inputs.publishToCentral == false
         run: mvn deploy --file ${{inputs.baseDir}}pom.xml -Dignore.moditect=true
       - name: Publish To Central
-        if: inputs.publishToCentral
+        if: inputs.publishToCentral || inputs.publishToCentral == 'true'
         run:
-          mvn deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}} -DskipTests=true
+          mvn deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}} -DskipTests=true -Dignore.moditect=true

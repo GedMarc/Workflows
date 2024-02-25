@@ -130,8 +130,9 @@ jobs:
         run:
           mvn -B package --file ${{inputs.baseDir}}pom.xml -U
       - name: Publish
-        run: mvn deploy --file ${{inputs.baseDir}}pom.xml  -Dignore.moditect=true
+        if: inputs.publishToCentral == 'false' || inputs.publishToCentral == false
+        run: mvn deploy --file ${{inputs.baseDir}}pom.xml -Dignore.moditect=true
       - name: Publish To Central
-        if: inputs.publishToCentral
+        if: inputs.publishToCentral || inputs.publishToCentral == 'true'
         run:
-          mvn deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dignore.moditect=true  -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}}
+          mvn deploy -Psonatype-distribution,release --file ${{inputs.baseDir}}pom.xml -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}} -DskipTests=true -Dignore.moditect=true
