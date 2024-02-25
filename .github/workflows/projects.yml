@@ -17,6 +17,7 @@ on:
         required: false
         type: boolean
         default: false
+    push:
     secrets:
       USERNAME:
         required: true
