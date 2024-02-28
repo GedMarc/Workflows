@@ -136,6 +136,13 @@ jobs:
                 }
               }
             ]
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-cache-${{github.job}}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
       - name: Build
         run:
           mvn -B deploy --file ${{inputs.baseDir}}pom.xml -U ${{inputs.publishToCentral == 'true' && '-Psonatype-distribution,release -Dgpg.passphrase=' || ' '}}${{inputs.publishToCentral == 'true' && secrets.GPG_PASSPHRASE || ' '}}
