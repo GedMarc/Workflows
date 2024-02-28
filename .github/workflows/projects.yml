@@ -142,7 +142,7 @@ jobs:
           path: ~/.m2/repository
           key: maven-cache-${{github.job}}
           restore-keys: |
-            ${{ runner.OS }}-npm-cache-
+            maven-cache-${{github.job}}
       - name: Build
         run:
           mvn -B deploy --file ${{inputs.baseDir}}pom.xml -U ${{inputs.publishToCentral == 'true' && '-Psonatype-distribution,release -Dgpg.passphrase=' || ' '}}${{inputs.publishToCentral == 'true' && secrets.GPG_PASSPHRASE || ' '}}
