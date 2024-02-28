@@ -131,6 +131,14 @@ jobs:
                 }
               }
             ]
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-cache-${{inputs.name}}
+          restore-keys: |
+            maven-cache-${{inputs.name}}
+
       - name: Build
         run:
           mvn -B deploy --file ${{inputs.baseDir}}pom.xml -U ${{inputs.publishToCentral == 'true' && '-Psonatype-distribution,release -Dgpg.passphrase=' || ' '}}${{inputs.publishToCentral == 'true' && secrets.GPG_PASSPHRASE || ' '}}
