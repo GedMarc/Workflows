@@ -141,6 +141,7 @@ jobs:
         with:
           path: ~/.m2/repository
           key: maven-cache-${{inputs.name}}
+          save-always: true
           restore-keys: |
             maven-cache-${{inputs.name}}
       - name: Build
